@@ -120,10 +120,7 @@ const Blob: React.FC<{
 };
 
 // Animated word-by-word title
-const AnimatedTitle: React.FC<{text: string; color: string}> = ({
-	text,
-	color,
-}) => {
+const AnimatedTitle: React.FC<{text: string}> = ({text}) => {
 	const frame = useCurrentFrame();
 	const {fps} = useVideoConfig();
 	const words = text.split(' ');
@@ -394,7 +391,7 @@ const Slide: React.FC<{
 			>
 				<AnimatedIcon icon={slide.icon} color={slide.color} />
 
-				<AnimatedTitle text={slide.title} color={slide.color} />
+				<AnimatedTitle text={slide.title} />
 
 				{/* Animated accent line */}
 				<div

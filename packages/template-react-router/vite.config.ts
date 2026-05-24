@@ -7,5 +7,6 @@ export default defineConfig({
   server: {
     port: 3000,
   },
-  plugins: [reactRouter(), tsconfigPaths(), tailwindcss()],
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  plugins: [reactRouter(), tsconfigPaths() as any, tailwindcss()],
 });
