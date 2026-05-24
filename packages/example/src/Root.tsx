@@ -229,6 +229,7 @@ import {FastUpdates} from './VisualModeTests/FastUpdates';
 import {FastUpdatesNested} from './VisualModeTests/FastUpdatesNested';
 import {VoiceVisualization} from './voice-visualization';
 import {WhisperWeb} from './WhisperWeb';
+import {KloudesimSlides} from './KloudesimSlides';
 
 class Vector2 {
 	readonly x: number;
@@ -2394,6 +2395,14 @@ export const Index: React.FC = () => {
 				height={720}
 				fps={30}
 				durationInFrames={2 * 60 * 30}
+			/>
+			<Composition
+				id="kloudesim-slides"
+				component={KloudesimSlides}
+				width={1920}
+				height={1080}
+				fps={30}
+				durationInFrames={8 * 90}
 			/>
 		</>
 	);
