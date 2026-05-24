@@ -20,7 +20,7 @@ export default defineConfig({
 				v3_throwAbortReason: true,
 			},
 		}),
-		tsconfigPaths(),
+		tsconfigPaths() as any,
 	],
 	base: '/convert/',
 	resolve: {

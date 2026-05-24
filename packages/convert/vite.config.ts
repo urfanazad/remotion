@@ -20,7 +20,7 @@ export default defineConfig({
 				v3_throwAbortReason: true,
 			},
 		}),
-		tsconfigPaths(),
+		tsconfigPaths() as any,
 	],
 	optimizeDeps: {
 		// turn off dependency optimization: https://github.com/vitejs/vite/issues/11672#issuecomment-1397855641
