@@ -1,7 +1,8 @@
 import type { NextConfig } from 'next';
 
 const config: NextConfig = {
-  experimental: { typedRoutes: true },
+  typedRoutes: true,
+  outputFileTracingRoot: __dirname,
 };
 
 export default config;
