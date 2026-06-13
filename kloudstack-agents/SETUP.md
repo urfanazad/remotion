@@ -11,7 +11,11 @@ cd ~/kloudstack
 cp .env.example .env
 # Edit .env with your values
 
-# 3. Start Claude Code
+# 3. Fill in company details in agents/docs-agent.md
+# Replace the three placeholder lines with KloudStack Ltd's actual
+# company number, VAT number, and registered address.
+
+# 4. Start Claude Code
 claude
 ```
 
@@ -19,38 +23,59 @@ Claude Code automatically reads `CLAUDE.md` and `.mcp.json` on startup.
 
 ---
 
-## Verify MCP packages before first use
+## MCP Package Status (tested 2026-06-13)
 
-Some packages in `.mcp.json` need version verification — run these checks first:
+### Official npm packages — ready to use
 
-```bash
-# Verified official packages
-npx -y @modelcontextprotocol/server-github --version
-npx -y @vercel/mcp-adapter --version
+| Server | Package | Version |
+|---|---|---|
+| GitHub | `@modelcontextprotocol/server-github` | 2025.4.8 |
+| Vercel | `@vercel/mcp-adapter` | 0.3.2 |
+| Netlify | `@netlify/mcp` | 1.15.1 |
+| Stripe | `@stripe/agent-toolkit` | 0.9.0 |
+| PayPal | `@paypal/mcp` | 1.8.1 |
 
-# Check these exist under the names used (update .mcp.json if the name differs)
-npm view netlify-mcp version
-npm view @stripe/agent-toolkit version
-npm view @atlassian/mcp-server version
-npm view @canva/mcp-server version
-npm view @adobe/mcp-server version
-npm view @heygen/hyperframes-mcp version
-npm view @lucid/mcp-server version
-npm view @mirohq/mcp-server version
-npm view @descript/mcp-server version
-npm view @docusign/mcp-server version
-npm view @paypal/mcp-server version
-```
+### Community npm packages — functional but unverified by vendor
 
-If any `npm view` command returns `404`, that package doesn't exist under that name.
-Search `npmjs.com` or the provider's developer docs for the correct package name,
-then update `.mcp.json` accordingly.
+| Server | Package | Version | Risk |
+|---|---|---|---|
+| HeyGen | `heygen-mcp-server` | 1.1.0 | Low — actively maintained |
+| Lucid | `lucid-mcp-server` | 0.1.5 | Low |
+| Atlassian | `atlassian-mcp` | 0.1.5 | Medium — community, not Atlassian official |
+| Microsoft 365 | `microsoft-mcp-server` | 0.1.0 | Medium — community |
+
+### HTTP/SSE — need endpoint URL from provider
+
+These providers don't publish an npm MCP package. They either expose an
+HTTP endpoint or require connecting through their platform (e.g. claude.ai
+connected apps). The `.mcp.json` has placeholder URLs for each.
+
+| Server | What to do |
+|---|---|
+| Google Workspace | Check workspace.google.com/products/apis or use the Google MCP Claude.ai integration |
+| Canva | Check canva.com/developers for an MCP endpoint |
+| Adobe | Check developer.adobe.com — Firefly Services has REST APIs; MCP endpoint TBC |
+| Miro | Check developers.miro.com for MCP endpoint URL |
+| Descript | Check descript.com/developers or use the Claude.ai integration |
+| DocuSign | Check developer.docusign.com — no npm MCP found; REST API only for now |
+
+**Tip:** If you added these as Claude.ai Connected Apps (in claude.ai settings),
+they're already available when using Claude Code via the web — you don't need
+to configure them in `.mcp.json` at all in that case.
+
+---
+
+## Quickest path to a working setup
+
+Start with just the five official npm servers (GitHub, Vercel, Netlify, Stripe, PayPal)
+plus whichever community ones you want. Comment out the HTTP ones in `.mcp.json`
+until you have their endpoint URLs.
 
 ---
 
 ## Fill in before using docs-agent
 
-Open `agents/docs-agent.md` and replace the placeholder lines:
+Open `agents/docs-agent.md` and replace:
 
 ```
 Company number (fill in: ________________)
@@ -59,12 +84,3 @@ Registered address (fill in: ________________)
 ```
 
 with KloudStack Ltd's actual details.
-
----
-
-## Token scoping (for security)
-
-Currently all tokens are in one `.env` file and Claude Code loads them all.
-For tighter scoping, consider running separate Claude Code instances per agent type,
-each with only that agent's `.env` subset. This prevents, for example, the content
-agent from accidentally having access to Stripe keys.

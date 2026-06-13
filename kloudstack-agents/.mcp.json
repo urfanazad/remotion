@@ -1,117 +1,140 @@
 {
   "mcpServers": {
+
+    "_SECTION_npm_based": {
+      "command": "echo",
+      "args": ["Official and community npm MCP servers — verified package names below"]
+    },
+
     "github": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-github@0.6.2"],
+      "args": ["-y", "@modelcontextprotocol/server-github@2025.4.8"],
       "env": {
         "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
       }
     },
+
     "vercel": {
       "command": "npx",
-      "args": ["-y", "@vercel/mcp-adapter@0.4.2", "stdio"],
+      "args": ["-y", "@vercel/mcp-adapter@0.3.2", "stdio"],
       "env": {
         "VERCEL_TOKEN": "${VERCEL_TOKEN}"
       }
     },
+
     "netlify": {
       "command": "npx",
-      "args": ["-y", "netlify-mcp@0.1.0"],
+      "args": ["-y", "@netlify/mcp@1.15.1"],
       "env": {
         "NETLIFY_TOKEN": "${NETLIFY_TOKEN}"
       }
     },
+
     "stripe": {
       "command": "npx",
-      "args": ["-y", "@stripe/agent-toolkit@0.1.0", "mcp"],
+      "args": ["-y", "@stripe/agent-toolkit@0.9.0", "mcp"],
       "env": {
         "STRIPE_SECRET_KEY": "${STRIPE_SECRET_KEY}"
       }
     },
+
+    "paypal": {
+      "command": "npx",
+      "args": ["-y", "@paypal/mcp@1.8.1"],
+      "env": {
+        "PAYPAL_CLIENT_ID": "${PAYPAL_CLIENT_ID}",
+        "PAYPAL_CLIENT_SECRET": "${PAYPAL_CLIENT_SECRET}"
+      }
+    },
+
+    "heygen": {
+      "command": "npx",
+      "args": ["-y", "heygen-mcp-server@1.1.0"],
+      "env": {
+        "HEYGEN_API_KEY": "${HEYGEN_TOKEN}"
+      }
+    },
+
+    "lucid": {
+      "command": "npx",
+      "args": ["-y", "lucid-mcp-server@0.1.5"],
+      "env": {
+        "LUCID_TOKEN": "${LUCID_TOKEN}"
+      }
+    },
+
     "atlassian": {
       "command": "npx",
-      "args": ["-y", "@atlassian/mcp-server@1.0.0"],
+      "args": ["-y", "atlassian-mcp@0.1.5"],
       "env": {
         "ATLASSIAN_TOKEN": "${ATLASSIAN_TOKEN}",
         "ATLASSIAN_EMAIL": "${ATLASSIAN_EMAIL}",
         "ATLASSIAN_BASE_URL": "${ATLASSIAN_BASE_URL}"
       }
     },
-    "google-workspace": {
-      "command": "npx",
-      "args": ["-y", "@googleapis/mcp-server@0.1.0"],
-      "env": {
-        "GOOGLE_CLIENT_ID": "${GOOGLE_CLIENT_ID}",
-        "GOOGLE_CLIENT_SECRET": "${GOOGLE_CLIENT_SECRET}",
-        "GOOGLE_REFRESH_TOKEN": "${GOOGLE_REFRESH_TOKEN}"
-      }
-    },
+
     "microsoft-365": {
       "command": "npx",
-      "args": ["-y", "@microsoft/mcp-server-graph@0.1.0"],
+      "args": ["-y", "microsoft-mcp-server@0.1.0"],
       "env": {
         "MICROSOFT_TENANT_ID": "${MICROSOFT_TENANT_ID}",
         "MICROSOFT_CLIENT_ID": "${MICROSOFT_CLIENT_ID}",
         "MICROSOFT_CLIENT_SECRET": "${MICROSOFT_CLIENT_SECRET}"
       }
     },
+
+    "_SECTION_http_based": {
+      "command": "echo",
+      "args": ["HTTP/SSE MCP servers — fill in URL from each provider's developer docs"]
+    },
+
+    "google-workspace": {
+      "type": "sse",
+      "url": "REPLACE_WITH_GOOGLE_MCP_ENDPOINT",
+      "headers": {
+        "Authorization": "Bearer ${GOOGLE_REFRESH_TOKEN}"
+      }
+    },
+
     "canva": {
-      "command": "npx",
-      "args": ["-y", "@canva/mcp-server@0.1.0"],
-      "env": {
-        "CANVA_TOKEN": "${CANVA_TOKEN}"
+      "type": "sse",
+      "url": "REPLACE_WITH_CANVA_MCP_ENDPOINT",
+      "headers": {
+        "Authorization": "Bearer ${CANVA_TOKEN}"
       }
     },
+
     "adobe": {
-      "command": "npx",
-      "args": ["-y", "@adobe/mcp-server@0.1.0"],
-      "env": {
-        "ADOBE_CLIENT_ID": "${ADOBE_CLIENT_ID}",
-        "ADOBE_CLIENT_SECRET": "${ADOBE_CLIENT_SECRET}"
+      "type": "sse",
+      "url": "REPLACE_WITH_ADOBE_MCP_ENDPOINT",
+      "headers": {
+        "Authorization": "Bearer ${ADOBE_CLIENT_SECRET}",
+        "x-api-key": "${ADOBE_CLIENT_ID}"
       }
     },
-    "heygen": {
-      "command": "npx",
-      "args": ["-y", "@heygen/hyperframes-mcp@0.1.0"],
-      "env": {
-        "HEYGEN_TOKEN": "${HEYGEN_TOKEN}"
-      }
-    },
-    "lucid": {
-      "command": "npx",
-      "args": ["-y", "@lucid/mcp-server@0.1.0"],
-      "env": {
-        "LUCID_TOKEN": "${LUCID_TOKEN}"
-      }
-    },
+
     "miro": {
-      "command": "npx",
-      "args": ["-y", "@mirohq/mcp-server@0.1.0"],
-      "env": {
-        "MIRO_TOKEN": "${MIRO_TOKEN}"
+      "type": "sse",
+      "url": "REPLACE_WITH_MIRO_MCP_ENDPOINT",
+      "headers": {
+        "Authorization": "Bearer ${MIRO_TOKEN}"
       }
     },
+
     "descript": {
-      "command": "npx",
-      "args": ["-y", "@descript/mcp-server@0.1.0"],
-      "env": {
-        "DESCRIPT_TOKEN": "${DESCRIPT_TOKEN}"
+      "type": "sse",
+      "url": "REPLACE_WITH_DESCRIPT_MCP_ENDPOINT",
+      "headers": {
+        "Authorization": "Bearer ${DESCRIPT_TOKEN}"
       }
     },
+
     "docusign": {
-      "command": "npx",
-      "args": ["-y", "@docusign/mcp-server@0.1.0"],
-      "env": {
-        "DOCUSIGN_TOKEN": "${DOCUSIGN_TOKEN}",
-        "DOCUSIGN_ACCOUNT_ID": "${DOCUSIGN_ACCOUNT_ID}"
-      }
-    },
-    "paypal": {
-      "command": "npx",
-      "args": ["-y", "@paypal/mcp-server@0.1.0"],
-      "env": {
-        "PAYPAL_CLIENT_ID": "${PAYPAL_CLIENT_ID}",
-        "PAYPAL_CLIENT_SECRET": "${PAYPAL_CLIENT_SECRET}"
+      "type": "sse",
+      "url": "REPLACE_WITH_DOCUSIGN_MCP_ENDPOINT",
+      "headers": {
+        "Authorization": "Bearer ${DOCUSIGN_TOKEN}",
+        "x-account-id": "${DOCUSIGN_ACCOUNT_ID}"
       }
     }
   }
