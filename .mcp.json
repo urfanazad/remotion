@@ -1,0 +1,39 @@
+{
+  "mcpServers": {
+    "vercel": {
+      "type": "http",
+      "url": "https://mcp.vercel.com",
+      "headers": {
+        "Authorization": "Bearer ${VERCEL_TOKEN}"
+      }
+    },
+    "google-drive": {
+      "type": "http",
+      "url": "https://drivemcp.googleapis.com/mcp/v1",
+      "headers": {
+        "Authorization": "Bearer ${GOOGLE_TOKEN}"
+      }
+    },
+    "canva": {
+      "type": "http",
+      "url": "https://mcp.canva.com/mcp",
+      "headers": {
+        "Authorization": "Bearer ${CANVA_TOKEN}"
+      }
+    },
+    "stripe": {
+      "type": "http",
+      "url": "https://mcp.stripe.com",
+      "headers": {
+        "Authorization": "Bearer ${STRIPE_SECRET_KEY}"
+      }
+    },
+    "docusign": {
+      "type": "http",
+      "url": "https://mcp.docusign.com/mcp",
+      "headers": {
+        "Authorization": "Bearer ${DOCUSIGN_TOKEN}"
+      }
+    }
+  }
+}
