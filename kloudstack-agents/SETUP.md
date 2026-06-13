@@ -29,11 +29,11 @@ Claude Code automatically reads `CLAUDE.md` and `.mcp.json` on startup.
 
 | Server | Package | Version |
 |---|---|---|
-| GitHub | `@modelcontextprotocol/server-github` | 2025.4.8 |
-| Vercel | `@vercel/mcp-adapter` | 0.3.2 |
-| Netlify | `@netlify/mcp` | 1.15.1 |
-| Stripe | `@stripe/agent-toolkit` | 0.9.0 |
-| PayPal | `@paypal/mcp` | 1.8.1 |
+| GitHub | `ghcr.io/github/github-mcp-server` (Docker) | latest — requires Docker |
+| Vercel | `@vercel/mcp-adapter` (npm) | 0.3.2 |
+| Netlify | `@netlify/mcp` (npm) | 1.15.1 |
+| Stripe | `@stripe/agent-toolkit` (npm) | 0.9.0 |
+| PayPal | `@paypal/mcp` (npm) | 1.8.1 |
 
 ### Community npm packages — functional but unverified by vendor
 
