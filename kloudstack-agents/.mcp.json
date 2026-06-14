@@ -1,6 +1,14 @@
 {
   "mcpServers": {
 
+    "marketplace": {
+      "type": "http",
+      "url": "http://localhost:3000/api/mcp",
+      "headers": {
+        "x-api-key": "${MARKETPLACE_API_KEY}"
+      }
+    },
+
     "_SECTION_npm_based": {
       "command": "echo",
       "args": ["Official and community npm MCP servers — verified package names below"]
