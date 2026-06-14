@@ -65,6 +65,30 @@ to configure them in `.mcp.json` at all in that case.
 
 ---
 
+## CapCut MCP — local install required
+
+CapCut MCP is not yet on npm. Install it from source once on your machine:
+
+```bash
+# 1. Clone and build
+git clone https://github.com/atx-guy/capcut-mcp-server.git ~/capcut-mcp-server
+cd ~/capcut-mcp-server
+npm install
+npm run build
+
+# 2. Install VectCutAPI (required local service)
+# Follow instructions at: https://github.com/atx-guy/capcut-mcp-server#vectcutapi
+# It runs on http://localhost:9001
+
+# 3. Before each Claude Code session that uses CapCut, start VectCutAPI first:
+# ./vectcutapi  (or however the binary is named after install)
+```
+
+The `.mcp.json` already points to `~/capcut-mcp-server/dist/index.js`.
+If you installed it elsewhere, update that path.
+
+---
+
 ## Quickest path to a working setup
 
 Start with just the five official npm servers (GitHub, Vercel, Netlify, Stripe, PayPal)

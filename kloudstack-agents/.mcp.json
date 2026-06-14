@@ -59,6 +59,14 @@
       }
     },
 
+    "capcut": {
+      "command": "node",
+      "args": ["${HOME}/capcut-mcp-server/dist/index.js"],
+      "env": {
+        "CAPCUT_API_URL": "http://localhost:9001"
+      }
+    },
+
     "lucid": {
       "command": "npx",
       "args": ["-y", "lucid-mcp-server@0.1.5"],
