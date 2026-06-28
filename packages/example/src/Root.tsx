@@ -230,6 +230,7 @@ import {FastUpdatesNested} from './VisualModeTests/FastUpdatesNested';
 import {VoiceVisualization} from './voice-visualization';
 import {WhisperWeb} from './WhisperWeb';
 import {KloudesimSlides} from './KloudesimSlides';
+import {KloudesimViralVideo, KLOUDESIM_VIRAL_DURATION} from './KloudesimViralVideo';
 
 class Vector2 {
 	readonly x: number;
@@ -2403,6 +2404,14 @@ export const Index: React.FC = () => {
 				height={1080}
 				fps={30}
 				durationInFrames={8 * 90}
+			/>
+			<Composition
+				id="kloudesim-viral"
+				component={KloudesimViralVideo}
+				width={1080}
+				height={1920}
+				fps={30}
+				durationInFrames={KLOUDESIM_VIRAL_DURATION}
 			/>
 		</>
 	);
