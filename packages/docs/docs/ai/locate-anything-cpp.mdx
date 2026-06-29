@@ -1,0 +1,191 @@
+---
+image: /generated/articles-docs-ai-locate-anything-cpp.png
+crumb: 'AI'
+title: Object detection with locate-anything.cpp
+sidebar_label: locate-anything.cpp
+---
+
+[locate-anything.cpp](https://github.com/mudler/locate-anything.cpp) is a C++17 implementation of NVIDIA's LocateAnything-3B model. Given an image and a text prompt, it returns labeled bounding boxes — no Python runtime required.
+
+You can use it with Remotion to annotate videos with AI-detected bounding boxes.
+
+## How it works
+
+1. Run `locate-anything-cli` on each frame to produce bounding box JSON.
+2. Pass that JSON as [input props](/docs/passing-props) to a Remotion composition.
+3. Remotion renders the bounding boxes as animated SVG overlays on top of the video.
+
+## Prerequisites
+
+Build locate-anything.cpp from source and download a GGUF model:
+
+```bash title="Terminal"
+git clone --recurse-submodules https://github.com/mudler/locate-anything.cpp
+cd locate-anything.cpp
+cmake -B build -DLA_BUILD_CLI=ON
+cmake --build build -j
+```
+
+Download the recommended `q8_0` model (~6.3 GB) from Hugging Face and note its path.
+
+## Step 1 – Detect objects in each frame
+
+Extract frames from a video, then run detection on each one:
+
+```bash title="Terminal"
+# Extract frames at 30fps into a frames/ directory
+ffmpeg -i input.mp4 -r 30 frames/frame_%04d.png
+
+# Run detection on every frame and save results
+for f in frames/*.png; do
+  name=$(basename "$f" .png)
+  ./build/locate-anything-cli detect \
+    --model /path/to/model.gguf \
+    --input "$f" \
+    --prompt "person" \
+    > "detections/$name.json"
+done
+```
+
+Each output file is a JSON array of detections:
+
+```json title="detections/frame_0001.json"
+[
+  {
+    "label": "person",
+    "score": 0.91,
+    "box": { "x1": 120, "y1": 45, "x2": 310, "y2": 480 }
+  }
+]
+```
+
+## Step 2 – Aggregate detections
+
+Merge the per-frame JSON files into a single array, indexed by frame number:
+
+```ts title="aggregate.ts"
+import fs from 'fs';
+import path from 'path';
+
+const detectionsDir = './detections';
+const files = fs.readdirSync(detectionsDir).sort();
+
+const allDetections: Record<number, unknown[]> = {};
+
+files.forEach((file, index) => {
+  const content = fs.readFileSync(path.join(detectionsDir, file), 'utf-8');
+  allDetections[index] = JSON.parse(content);
+});
+
+fs.writeFileSync('detections.json', JSON.stringify(allDetections, null, 2));
+```
+
+Run it:
+
+```bash title="Terminal"
+npx tsx aggregate.ts
+```
+
+## Step 3 – Build the Remotion composition
+
+Create a composition that reads `detections.json` and overlays the bounding boxes on your video:
+
+```tsx twoslash title="BoundingBoxOverlay.tsx"
+// @filename: BoundingBoxOverlay.tsx
+import React from 'react';
+import {AbsoluteFill, OffthreadVideo, useCurrentFrame, useVideoConfig, staticFile} from 'remotion';
+
+type Detection = {
+  label: string;
+  score: number;
+  box: {x1: number; y1: number; x2: number; y2: number};
+};
+
+type Props = {
+  detections: Record<number, Detection[]>;
+};
+
+export const BoundingBoxOverlay: React.FC<Props> = ({detections}) => {
+  const frame = useCurrentFrame();
+  const {width, height} = useVideoConfig();
+
+  const frameDetections = detections[frame] ?? [];
+
+  return (
+    <AbsoluteFill>
+      <OffthreadVideo src={staticFile('input.mp4')} />
+      <svg
+        style={{position: 'absolute', top: 0, left: 0}}
+        width={width}
+        height={height}
+        viewBox={`0 0 ${width} ${height}`}
+      >
+        {frameDetections.map((det, i) => {
+          const {x1, y1, x2, y2} = det.box;
+          return (
+            <g key={i}>
+              <rect
+                x={x1}
+                y={y1}
+                width={x2 - x1}
+                height={y2 - y1}
+                fill="none"
+                stroke="#00ff88"
+                strokeWidth={2}
+              />
+              <text x={x1 + 4} y={y1 - 6} fill="#00ff88" fontSize={14}>
+                {det.label} {Math.round(det.score * 100)}%
+              </text>
+            </g>
+          );
+        })}
+      </svg>
+    </AbsoluteFill>
+  );
+};
+```
+
+Register it in `Root.tsx`:
+
+```tsx twoslash title="Root.tsx"
+// @filename: Root.tsx
+import React from 'react';
+import {Composition} from 'remotion';
+// ---cut---
+import detections from '../detections.json';
+import {BoundingBoxOverlay} from './BoundingBoxOverlay';
+
+export const RemotionRoot: React.FC = () => {
+  return (
+    <Composition
+      id="BoundingBoxOverlay"
+      component={BoundingBoxOverlay}
+      durationInFrames={Object.keys(detections).length}
+      fps={30}
+      width={1920}
+      height={1080}
+      defaultProps={{detections}}
+    />
+  );
+};
+```
+
+## Step 4 – Render
+
+```bash title="Terminal"
+npx remotion render BoundingBoxOverlay output.mp4
+```
+
+## Tips
+
+- **Quantization**: The `q8_0` model offers near-lossless accuracy. Use `q4_k` if disk space or speed is a priority.
+- **Batch frames**: For long videos, process frames in parallel using [`xargs -P`](https://man7.org/linux/man-pages/man1/xargs.1.html) or a task queue to reduce total detection time.
+- **GPU acceleration**: Add `-DLA_CUDA=ON` (or the appropriate ggml backend flag) to the CMake command to enable GPU inference.
+- **Multiple prompts**: Run detection multiple times with different prompts and merge the results to detect several object classes at once.
+
+## See also
+
+- [locate-anything.cpp on GitHub](https://github.com/mudler/locate-anything.cpp)
+- [Passing props to a composition](/docs/passing-props)
+- [`<OffthreadVideo>`](/docs/offthreadvideo)
+- [`staticFile()`](/docs/staticfile)

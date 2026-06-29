@@ -1333,6 +1333,7 @@ const sidebars: SidebarsConfig = {
 				'ai/mcp',
 				'ai/system-prompt',
 				'ai/skills',
+				'ai/locate-anything-cpp',
 			],
 		},
 
